@@ -67,9 +67,9 @@ class Agent:
     def status(cls, uuids=[]):
         return Services.heartbeat.status(uuids)
     
-    def __init__(self, uuid, options={}):
+    def __init__(self, uuid, options):
         self.uuid = uuid
-        self.options = options
+        self.options = options or {}
         
     def call(self, cls, method, request, replyto):
         options = Options(self.options)
@@ -77,6 +77,7 @@ class Agent:
             options.ctag = ReplyManager.CTAG
             options.watchdog = Services.watchdog
             options.any = replyto
+        log.info('OPTIONS: %s', options)
         agent = proxy.agent(self.uuid, **options)
         clsobj = getattr(agent, cls)
         inst = clsobj()

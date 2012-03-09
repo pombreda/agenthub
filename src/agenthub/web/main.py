@@ -51,11 +51,12 @@ class Call(Controller):
         httpcode = 200
         try:
             body = self.body()
+            options = body.options
             request = Request(body.request)
             request = request.valid()
             replyto = ReplyTo(body.replyto)
             replyto = replyto.valid()
-            agent = AgentFacade(uuid)
+            agent = AgentFacade(uuid, options)
             reply = agent.call(cls, method, request, replyto)
         except EXCEPTIONS, raised:
             reply = str(raised)
