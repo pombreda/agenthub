@@ -20,6 +20,7 @@ from gofer.rmi.async import WatchDog
 from agenthub.hub.config import Config, nvl
 from agenthub.hub.heartbeat import HeartbeatManager
 from agenthub.hub.reply import ReplyManager
+from agenthub.hub.notify import NotifyManager
 from agenthub.hub.logutil import getLogger
 
 log = getLogger(__name__)
@@ -36,6 +37,7 @@ class Services:
     reply = None
     watchdog = None
     heartbeat = None
+    notify = None
     started = False
 
     @classmethod
@@ -59,6 +61,8 @@ class Services:
         cls.reply.start(cls.watchdog)
         cls.heartbeat = HeartbeatManager(url)
         cls.heartbeat.start()
+        cls.notify = NotifyManager()
+        cls.notify.start()
 
 
 class Agent:
@@ -77,7 +81,6 @@ class Agent:
             options.ctag = ReplyManager.CTAG
             options.watchdog = Services.watchdog
             options.any = replyto
-        log.info('OPTIONS: %s', options)
         agent = proxy.agent(self.uuid, **options)
         clsobj = getattr(agent, cls)
         inst = clsobj()

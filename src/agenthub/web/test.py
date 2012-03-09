@@ -14,6 +14,7 @@
 #
 
 import web
+import time
 from agenthub.web.http import BadRequest
 from agenthub.web.controller import Controller
 from gofer.messaging import Options
@@ -27,9 +28,23 @@ log = getLogger(__name__)
 
 
 class Test(Controller):
+    
+    PATH = '/tmp/hubtest.log'
 
     def POST(self, x):
-        log.info(self.body())
+        s = []
+        body = self.body()
+        f = open(self.PATH, 'a+')
+        f.write('\n')
+        s.append(time.ctime())
+        s.append('       sn: %s' % body.get('sn'))
+        s.append('   status: %s' % body.get('status'))
+        s.append('    reply: %s' % body.get('reply'))
+        s.append('exception: %s' % body.get('exception'))
+        f.write('\n'.join(s))
+        f.write('\n')
+        f.flush()
+        f.close()
         self.status(200)
 
 #

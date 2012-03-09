@@ -14,11 +14,11 @@
 #
 
 import os
+import simplejson as json
 from gofer.messaging import Queue, Options
 from gofer.rmi.async import ReplyConsumer, Listener
+from agenthub.hub.notify import NotifyJournal
 from agenthub.web.http import *
-from agenthub.hub.config import Config, nvl
-from agenthub.hub.rest import Rest, Basic, NoAuth
 from logging import getLogger
 
 
@@ -35,93 +35,43 @@ class ReplyManager(Listener):
 
     def start(self, watchdog):
         self.consumer.start(self, watchdog=watchdog)
-        log.info('watchdog: started')
+        log.info('reply (mgr): started')
 
     def succeeded(self, reply):
         log.info('succeeded: %s', reply)
-        try:
-            replyto = Options(reply.any)
-            method = replyto.method
-            path = replyto.path
-            systemid = replyto.systemid
-            peer = Peer(systemid)          
-            path = peer.join(path)
-            rest = peer.rest()
-            r = rest.request(method, path, reply.retval)
-            log.info('(%s) %s', path, r)
-        except Exception:
-            log.exception(reply)
-
+        body = dict(
+            sn=reply.sn,
+            status=(200, HTTP_CODES[200]),
+            reply=reply.retval)
+        je = dict(
+            notify=reply.any,
+            body=body)
+        self.write(je, reply.sn)
+            
     def failed(self, reply):
         log.info('failed: %s', reply)
         try:
             reply.throw()
         except EXCEPTIONS, raised:
             pass
-        try:
-            self.__failed(reply, raised)
-        except Exception:
-            log.exception(reply)
-            
-    def __failed(self, reply, raised):
-        replyto = Options(reply.any)
-        method = replyto.method
-        path = replyto.path
-        systemid = replyto.systemid
-        peer = Peer(systemid)          
-        path = peer.join(path)
         httpcode = status(raised)
-        reply = dict(
+        body = dict(
+            sn=reply.sn,
             status=(httpcode, HTTP_CODES[httpcode]),
-            exception=str(raised))         
-        rest = peer.rest()
-        r = rest.request(method, path, reply)
-        log.info('(%s) %s', path, r)
-
+            exception=str(raised))
+        je = dict(
+            notify=reply.any,
+            body=body)
+        fn = '%s.failed' % reply.sn
+        self.write(je, fn)
+            
     def status(self, reply):
         pass
-
-
-class Peer:
     
-    CONFD = '/etc/agenthub/conf.d'
-    
-    def __init__(self, id):
-        self.id = id
-        cfg = self.__cfg()
-        self.host = nvl(cfg.main.host, 'localhost')
-        self.port = int(nvl(cfg.main.port, 443))
-        self.auth = self.__auth(cfg)
-        self.root = nvl(cfg.main.root)
-    
-    def rest(self):
-        rest = Rest(self.host, self.port, self.auth)
-        return rest
-        
-    def join(self, path):
-        if self.root:
-            return ''.join((self.root, path))
-        else:
-            return path
-        
-    def __auth(self, cfg):
-        auth = nvl(cfg.main.auth)
-        if not auth:
-            return NoAuth()
-        if auth == 'basic':
-            basic = cfg.basic
-            return Basic(basic.user, basic.password)
-        
-    def __cfg(self):
-        fn = '.'.join((self.id, 'conf'))
-        path = os.path.join(self.CONFD, fn)
-        cfg = Config(path)
-        return cfg
-    
-    def __str__(self):
-        s = []
-        s.append('host=%s' % self.host)
-        s.append('port=%s' % self.port)
-        s.append('root=%s' % self.root)
-        s.append('auth=%s' % self.auth)
-        return ','.join(s)
+    def write(self, reply, fn):
+        path = os.path.join(NotifyJournal.PATH, fn)
+        fp = open(path, 'w')
+        try:
+            json.dump(reply, fp)
+        finally:
+            fp.close()
