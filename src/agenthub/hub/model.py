@@ -14,6 +14,7 @@
 #
 
 from gofer.messaging import Options
+from agenthub.web.http import BadRequest
 
 
 class Request:
