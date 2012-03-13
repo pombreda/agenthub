@@ -61,6 +61,9 @@ class Call(Controller):
         except EXCEPTIONS, raised:
             reply = str(raised)
             httpcode = status(raised)
+        except Exception, raised:
+            httpcode = 500
+            reply = str(raised)
         return self.reply(httpcode, reply)
 
     def body(self):

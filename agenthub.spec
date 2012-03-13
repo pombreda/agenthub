@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.6
-Release: 5%{?dist}
+Version: 0.1
+Release: 1%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
@@ -66,28 +66,3 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.6-5
-- permissions on /var/log/agenthub. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-5
-- Add missing files. (jortel@redhat.com)
-- Add requires: httpd, mod_wsgi. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-3
-- correct requires: python-webpy. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-2
-- Update Requires: (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-1
-- Add srv/ and /etc/httpd/conf.d files. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.4-1
-- Add LICENSE file. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.3-1
-- Add LICENSE file. (jortel@redhat.com)
-
-* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.2-1
-- new package built with tito
-
