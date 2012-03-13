@@ -37,8 +37,12 @@ mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}/conf.d
 mkdir -p %{buildroot}/%{_var}/log/%{name}
 mkdir -p %{buildroot}/%{_var}/lib/%{name}/journal/notify
+mkdir -p %{buildroot}/srv/%{name}
+mkdir -p %{buildroot}/%{_sysconfdir}/httpd/conf.d/
 
 cp etc/%{name}/*.conf %{buildroot}/%{_sysconfdir}/%{name}
+cp etc/httpd/conf.d/%{name}.conf %{buildroot}/%{_sysconfdir}/httpd/conf.d
+cp srv/%{name}/* %{buildroot}/srv/%{name}
 
 rm -rf %{buildroot}/%{python_sitelib}/%{name}*.egg-info
 
@@ -50,6 +54,8 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/%{name}/conf.d/
 %{python_sitelib}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/hub.conf
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%attr(-,apache,apache) /srv/%{name}/webservices.wsgi
 %{_var}/log/%{name}
 %doc LICENSE
 
