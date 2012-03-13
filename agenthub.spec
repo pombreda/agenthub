@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.5
+Version: 0.6
 Release: 5%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
@@ -61,7 +61,8 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/%{name}/hub.conf
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %attr(-,apache,apache) /srv/%{name}/webservices.wsgi
-%{_var}/log/%{name}
+%attr(-,apache,apache) %{_var}/log/%{name}
+%attr(-,apache,apache) %{_var}/lib/%{name}/journal/notify
 %doc LICENSE
 
 %changelog
