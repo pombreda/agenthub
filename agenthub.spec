@@ -2,7 +2,7 @@
 
 Name: agenthub
 Version: 0.5
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
@@ -17,6 +17,8 @@ Requires: python-webpy
 Requires: python-gofer >= 0.66
 Requires: python-iniparse
 Requires: python-simplejson
+Requires: mod_wsgi
+Requires: httpd
 
 %description
 The rest hub is a gofer server that provides gofer services aggregation
