@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-3
+- correct requires: python-webpy. (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-2
 - Update Requires: (jortel@redhat.com)
 
