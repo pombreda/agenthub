@@ -66,6 +66,9 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.6-5
+- permissions on /var/log/agenthub. (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-5
 - Add missing files. (jortel@redhat.com)
 - Add requires: httpd, mod_wsgi. (jortel@redhat.com)
