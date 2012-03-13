@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.3
+Version: 0.4
 Release: 1%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
@@ -54,6 +54,9 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.4-1
+- Add LICENSE file. (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.3-1
 - Add LICENSE file. (jortel@redhat.com)
 
