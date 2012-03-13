@@ -2,7 +2,7 @@
 
 Name: agenthub
 Version: 0.5
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
