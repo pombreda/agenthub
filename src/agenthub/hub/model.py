@@ -46,7 +46,7 @@ class Request:
         if not request:
             request = {}
         if not isinstance(request, dict):
-            raise BadRequest()
+            raise BadRequest('"request" must be <dict>')
         request = Options(request)
         self.cntr(request)
         self.args(request)
@@ -57,13 +57,13 @@ class Request:
         cntr = request.constructor
         if cntr:
             if not isinstance(cntr, list):
-                raise BadRequest()
+                raise BadRequest('"constructor" must be <list>')
             if len(cntr) != 2:
-                raise BadRequest()
+                raise BadRequest('"constructor" must be <list>[2]')
             if not isinstance(cntr[0], list):
-                raise BadRequest()
+                raise BadRequest('"constructor[0]" must be <list>')
             if not isinstance(cntr[1], dict):
-                raise BadRequest()
+                raise BadRequest('"constructor[1]" must be <dict>')
         else:
             cntr = ([],{})
             request.constructor = cntr
@@ -73,7 +73,7 @@ class Request:
         args = request.args
         if args:
             if not isinstance(args, list):
-                raise BadRequest()
+                raise BadRequest('"args" must be <list>')
         else:
             args = []
             request.args = args
@@ -83,7 +83,7 @@ class Request:
         kwargs = request.kwargs
         if kwargs:
             if not isinstance(args, dict):
-                raise BadRequest()
+                raise BadRequest('"kwargs" must be <dict>')
         else:
             kwargs = {}
             request.kwargs = kwargs
@@ -100,6 +100,12 @@ class ReplyTo:
     }
     """
     
+    METHOD = (
+        'GET',
+        'POST',
+        'PUT',
+        'DELETE',)
+    
     def __init__(self, replyto):
         self.replyto = replyto
         
@@ -108,7 +114,7 @@ class ReplyTo:
         if replyto is None:
             return
         if not isinstance(replyto, dict):
-            raise BadRequest()
+            raise BadRequest('"replyto" must be <dict>')
         replyto = Options(replyto)
         self.method(replyto)
         self.path(replyto)
@@ -116,20 +122,21 @@ class ReplyTo:
         return replyto
     
     def method(self, replyto):
+        valid = self.METHOD
         # http method
         if not isinstance(replyto.method, basestring):
             raise BadRequest()
-        if not replyto.method:
-            raise BadRequest()
+        if replyto.method not in valid:
+            raise BadRequest('method must be %s' % valid)
     
     def path(self, replyto):
         if not isinstance(replyto.path, basestring):
-            raise BadRequest()
+            raise BadRequest('"path" must be <str>')
         if not replyto.path:
-            raise BadRequest()
+            raise BadRequest('"path" length < 0')
     
     def systemid(self, replyto):
         if not isinstance(replyto.systemid, basestring):
-            raise BadRequest()
+            raise BadRequest('"systemid" must be <str>')
         if not replyto.systemid:
-            raise BadRequest()
+            raise BadRequest('"systemid" length < 0')

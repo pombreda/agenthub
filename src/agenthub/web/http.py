@@ -68,7 +68,7 @@ class BadRequest(Exception):
 EXCEPTION_CODES = (
     (ClassNotFound, 404),
     (MethodNotFound, 404),
-    (NotPermitted, 405),
+    (NotPermitted, 403),
     (NotAuthorized, 401),
     (RequestTimeout, 408),
     (BadRequest, 400),
