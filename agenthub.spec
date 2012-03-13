@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.1
+Version: 0.2
 Release: 1%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
@@ -66,6 +66,10 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.2-1
+- better http/exception mapping and improved BadRequest() messages.
+  (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.1-1
 - new package built with tito
 
