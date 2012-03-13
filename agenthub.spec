@@ -2,7 +2,7 @@
 
 Name: agenthub
 Version: 0.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
@@ -13,8 +13,11 @@ BuildArch: noarch
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
 BuildRequires: rpm-python
-Requires: python-%{name} = %{version}
+Requires: python-web
+Requires: python-gofer >= 0.66
 Requires: python-iniparse
+Requires: python-simplejson
+
 %description
 The rest hub is a gofer server that provides gofer services aggregation
 that is exposed through a REST API.
