@@ -7,7 +7,7 @@ Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
 URL: https://fedorahosted.org/agenthub/
-Source0: https://fedorahosted.org/releases/g/o/agenthub/%{name}-%{version}.tar.gz
+Source0: https://fedorahosted.org/releases/a/g/agenthub/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 BuildRequires: python2-devel
