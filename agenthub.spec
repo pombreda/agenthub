@@ -63,6 +63,9 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-2
+- Update Requires: (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.5-1
 - Add srv/ and /etc/httpd/conf.d files. (jortel@redhat.com)
 
