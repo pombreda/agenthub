@@ -32,15 +32,15 @@ class Agent:
         self.uuid = uuid
         self.options = options or {}
         
-    def call(self, cls, method, request, replyto, any):
+    def call(self, classname, method, request, replyto, any):
         options = Options(self.options)
         if replyto:
             options.ctag = ReplyManager.CTAG
             options.watchdog = Services.watchdog
             options.any = dict(any=any, replyto=replyto)
         agent = proxy.agent(self.uuid, **options)
-        clsobj = getattr(agent, cls)
-        inst = clsobj()
+        Class = getattr(agent, classname)
+        inst = Class()
         cntr = request.cntr
         if cntr:
             inst(*cntr[0], **cntr[1])
