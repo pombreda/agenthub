@@ -51,7 +51,8 @@ class Call(Controller):
         httpcode = 200
         try:
             body = self.body()
-            options = body.options
+            options = Option(body.options)
+            options = options.valid()
             request = Request(body.request)
             request = request.valid()
             replyto = ReplyTo(body.replyto)

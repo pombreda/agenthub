@@ -17,6 +17,17 @@ from gofer.messaging import Options
 from agenthub.web.http import BadRequest
 
 
+class Option:
+    
+    def __init__(self, opts):
+        self.opts = opts or {}
+        
+    def valid(self):
+        if not isinstance(self.opts, dict):
+            raise BadRequest('"options" must be <dict>')
+        return Options(self.opts)
+
+   
 class Request:
     """
     The RMI (call) request model object.
@@ -38,11 +49,6 @@ class Request:
         self.request = request
         
     def valid(self):
-        """
-        Get a validated options object.
-        @return: A valid object.
-        @rtype: L{Options}
-        """
         request = self.request
         if not request:
             request = {}
