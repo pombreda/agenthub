@@ -68,10 +68,12 @@ class Call(Controller):
         return self.reply(httpcode, reply)
 
     def body(self):
-        b = Controller.body(self)
-        if not isinstance(b, dict):
-            raise BadRequest()
-        return Options(b)
+        body = Controller.body(self)
+        if body is None:
+            body = {}
+        if not isinstance(body, dict):
+            raise BadRequest('"body" must be <dict>')
+        return Options(body)
 
 #
 # REST Application

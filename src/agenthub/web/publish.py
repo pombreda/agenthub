@@ -34,10 +34,12 @@ class Publish(Controller):
         
     def body(self):
         body = Controller.body(self)
+        if body is None:
+            body = {}
         if not isinstance(body, dict):
-            raise BadRequest()
+            raise BadRequest('"body" must be <dict>')
         if not body:
-            raise BadRequest()
+            raise BadRequest('"body" <empty>')
         return body
 
 #
