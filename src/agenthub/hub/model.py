@@ -22,7 +22,7 @@ class Request:
     The RMI (call) request model object.
     options = {},
     request = {
-      constructor = ([],{}),
+      cntr = ([],{}),
       args = [],
       kwargs = {}
     }
@@ -31,6 +31,7 @@ class Request:
       method='',
       systemid = '',
     }
+    any = {}
     """
     
     def __init__(self, request):
@@ -54,19 +55,19 @@ class Request:
         return request
 
     def cntr(self, request):
-        cntr = request.constructor
+        cntr = request.cntr
         if cntr:
             if not isinstance(cntr, list):
-                raise BadRequest('"constructor" must be <list>')
+                raise BadRequest('"cntr" must be <list>')
             if len(cntr) != 2:
-                raise BadRequest('"constructor" must be <list>[2]')
+                raise BadRequest('"cntr" must be <list>[2]')
             if not isinstance(cntr[0], list):
-                raise BadRequest('"constructor[0]" must be <list>')
+                raise BadRequest('"cntr[0]" must be <list>')
             if not isinstance(cntr[1], dict):
-                raise BadRequest('"constructor[1]" must be <dict>')
+                raise BadRequest('"cntr[1]" must be <dict>')
         else:
             cntr = ([],{})
-            request.constructor = cntr
+            request.cntr = cntr
         return cntr
             
     def args(self, request):

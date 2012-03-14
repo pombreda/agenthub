@@ -31,11 +31,11 @@ class NotifyManager(Thread):
     ROOT = '/var/lib/agenthub/journal/notify'
     
     def __init__(self):
-        Thread.__init__(self, name='notify')
+        Thread.__init__(self)
         self.setDaemon(True)
         
     def run(self):
-        log.info('notify (mgr), started')
+        log.info('notify, started %s', os.getpid())
         while True:
             try:
                 self.poll()
@@ -45,27 +45,20 @@ class NotifyManager(Thread):
     def poll(self):
         jnl = NotifyJournal()
         for path in jnl.list():
-            self.process(path)
+            self.process(jnl, path)
         sleep(1)
 
-    def process(self, path):
+    def process(self, jnl, path):
         log.info(path)
         try:
-            je = self.read(path)
+            je = jnl.read(path)
             je = Options(je)
             notify = Options(je.notify)
             system = System(notify.systemid)
             r = system.notify(notify.method, notify.path, je.body)
-            os.unlink(path)
+            jnl.delete(path)
         except Exception:
-            log.exception(path)
-                
-    def read(self, path):
-        fp = open(path)
-        try:
-            return json.load(fp)
-        finally:
-            fp.close()
+            log.exception(path)        
 
     def __mkdir(self):
         if not os.path.exists(self.ROOT):
@@ -87,6 +80,29 @@ class NotifyJournal:
             files.append((ts, path))
         files = [p[1] for p in sorted(files)]
         return files
+    
+    def read(self, path):
+        fp = open(path)
+        try:
+            je = json.load(fp)
+            log.info(je)
+            return je
+        finally:
+            fp.close()
+            
+    def delete(self, path):
+        log.info(path)
+        os.unlink(path)
+            
+    def write(self, sn, notify, body):
+        path = os.path.join(self.path, sn)
+        je = dict(notify=notify, body=body)
+        fp = open(path, 'w')
+        try:
+            log.info(je)
+            json.dump(je, fp)
+        finally:
+            fp.close()
 
 
 class System:
@@ -105,6 +121,12 @@ class System:
         path = self.join(path)
         rest = Rest(self.host, self.port, self.auth)
         status = rest.request(method, path, body)
+        log.info(
+            'notified(%s): %s:%d %s:%s',
+                status[0],
+                self.host,
+                self.port,
+                method, path)
         return status
 
     def join(self, path):

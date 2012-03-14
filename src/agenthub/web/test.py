@@ -38,6 +38,7 @@ class Test(Controller):
         f.write('\n')
         s.append(time.ctime())
         s.append('       sn: %s' % body.get('sn'))
+        s.append('      any: %s' % body.get('any'))
         s.append('   status: %s' % body.get('status'))
         s.append('    reply: %s' % body.get('reply'))
         s.append('exception: %s' % body.get('exception'))

@@ -15,58 +15,15 @@
 
 from gofer import proxy
 from gofer.messaging import Options
-from gofer.messaging.broker import Broker
-from gofer.rmi.async import WatchDog
-from agenthub.hub.config import Config, nvl
-from agenthub.hub.heartbeat import HeartbeatManager
+from agenthub.hub.services import Services
 from agenthub.hub.reply import ReplyManager
-from agenthub.hub.notify import NotifyManager
-from agenthub.hub.logutil import getLogger
+from logging import getLogger
 
 log = getLogger(__name__)
-cfg = Config()
-
-#
-# Services
-#
-
-URL = cfg.broker.url
-
-class Services:
-    
-    reply = None
-    watchdog = None
-    heartbeat = None
-    notify = None
-    started = False
-
-    @classmethod
-    def start(cls, url=URL):
-        if not cls.started:
-            cls.__init(url)
-            cls.__start(url)
-            cls.started = True
-            
-    @classmethod
-    def __init(cls, url):
-        b = Broker(url)
-        b.cacert = nvl(cfg.broker.cacert)
-        b.clientcert = nvl(cfg.broker.clientcert)
-            
-    @classmethod
-    def __start(cls, url):
-        cls.watchdog = WatchDog(url=url)
-        cls.watchdog.start()
-        cls.reply = ReplyManager(url)
-        cls.reply.start(cls.watchdog)
-        cls.heartbeat = HeartbeatManager(url)
-        cls.heartbeat.start()
-        cls.notify = NotifyManager()
-        cls.notify.start()
 
 
 class Agent:
-    
+
     @classmethod
     def status(cls, uuids=[]):
         return Services.heartbeat.status(uuids)
@@ -75,12 +32,12 @@ class Agent:
         self.uuid = uuid
         self.options = options or {}
         
-    def call(self, cls, method, request, replyto):
+    def call(self, cls, method, request, replyto, any):
         options = Options(self.options)
         if replyto:
             options.ctag = ReplyManager.CTAG
             options.watchdog = Services.watchdog
-            options.any = replyto
+            options.any = dict(any=any, replyto=replyto)
         agent = proxy.agent(self.uuid, **options)
         clsobj = getattr(agent, cls)
         inst = clsobj()

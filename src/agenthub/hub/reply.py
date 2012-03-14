@@ -35,21 +35,22 @@ class ReplyManager(Listener):
 
     def start(self, watchdog):
         self.consumer.start(self, watchdog=watchdog)
-        log.info('reply (mgr): started')
+        log.info('reply: started')
 
     def succeeded(self, reply):
         log.info('succeeded: %s', reply)
+        any = Options(reply.any)
         body = dict(
             sn=reply.sn,
+            any=any.any,
             status=(200, HTTP_CODES[200]),
             reply=reply.retval)
-        je = dict(
-            notify=reply.any,
-            body=body)
-        self.write(je, reply.sn)
+        nj = NotifyJournal()
+        nj.write(reply.sn, any.replyto, body)
             
     def failed(self, reply):
         log.info('failed: %s', reply)
+        any = Options(reply.any)
         try:
             reply.throw()
         except EXCEPTIONS, raised:
@@ -57,21 +58,11 @@ class ReplyManager(Listener):
         httpcode = status(raised)
         body = dict(
             sn=reply.sn,
+            any=any.any,
             status=(httpcode, HTTP_CODES[httpcode]),
             exception=str(raised))
-        je = dict(
-            notify=reply.any,
-            body=body)
-        fn = '%s.failed' % reply.sn
-        self.write(je, fn)
+        nj = NotifyManager()
+        nj.write(reply.sn, any.replyto, body)
             
     def status(self, reply):
         pass
-    
-    def write(self, reply, fn):
-        path = os.path.join(NotifyJournal.PATH, fn)
-        fp = open(path, 'w')
-        try:
-            json.dump(reply, fp)
-        finally:
-            fp.close()

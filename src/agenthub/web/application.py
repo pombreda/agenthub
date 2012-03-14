@@ -18,7 +18,7 @@ import logging
 from agenthub.web import main
 from agenthub.web import publish
 from agenthub.web import test
-from agenthub.hub.main import Services
+from agenthub.hub.services import Services
 
 #
 # REST Application
@@ -30,8 +30,10 @@ URLS = (
     '/test', test.application,
 )
 
-Services.start()
 def wsgi_application():
     application = web.subdir_application(URLS)
     appfn = application.wsgifunc()
     return appfn
+
+
+Services.start()

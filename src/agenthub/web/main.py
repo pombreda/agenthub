@@ -56,8 +56,9 @@ class Call(Controller):
             request = request.valid()
             replyto = ReplyTo(body.replyto)
             replyto = replyto.valid()
+            any = body.any
             agent = AgentFacade(uuid, options)
-            reply = agent.call(cls, method, request, replyto)
+            reply = agent.call(cls, method, request, replyto, any)
         except EXCEPTIONS, raised:
             reply = str(raised)
             httpcode = status(raised)
