@@ -35,7 +35,7 @@ class NotifyManager(Thread):
         self.setDaemon(True)
         
     def run(self):
-        log.info('notify, started %s', os.getpid())
+        log.info('notify, started')
         while True:
             try:
                 self.poll()
