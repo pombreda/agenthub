@@ -60,7 +60,7 @@ rm -rf %{buildroot}
 %{python_sitelib}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/hub.conf
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
-%attr(-,apache,apache) /srv/%{name}/webservices.wsgi
+%attr(-,apache,apache) /srv/%{name}/*
 %attr(-,apache,apache) %{_var}/log/%{name}
 %attr(-,apache,apache) %{_var}/lib/%{name}/journal/notify
 %doc LICENSE

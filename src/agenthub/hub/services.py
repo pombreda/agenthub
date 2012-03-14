@@ -36,14 +36,11 @@ class Services:
     watchdog = None
     heartbeat = None
     notify = None
-    started = False
 
     @classmethod
     def start(cls, url=URL):
-        if not cls.started:
-            cls.__init(url)
-            cls.__start(url)
-            cls.started = True
+        cls.__init(url)
+        cls.__start(url)
             
     @classmethod
     def __init(cls, url):

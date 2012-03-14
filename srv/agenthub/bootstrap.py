@@ -13,23 +13,8 @@
 # Jeff Ortel <jortel@redhat.com>
 #
 
-import web
-import logging
-from agenthub.web import main
-from agenthub.web import publish
-from agenthub.web import test
 
-#
-# REST Application
-#
+from agenthub.hub.services import Services
 
-URLS = (
-    '/agent', main.application,
-    '/publish', publish.application,
-    '/test', test.application,
-)
 
-def wsgi_application():
-    application = web.subdir_application(URLS)
-    appfn = application.wsgifunc()
-    return appfn
+Services.start()
