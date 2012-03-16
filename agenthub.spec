@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.3
+Version: 0.4
 Release: 1%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
@@ -66,6 +66,13 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Fri Mar 16 2012 Jeff Ortel <jortel@redhat.com> 0.4-1
+- Change successful asynchronous httpcode (202) Accepted instead of 200.
+  (jortel@redhat.com)
+- Better exception propagation. (jortel@redhat.com)
+- minor renaming. (jortel@redhat.com)
+- Do options validation. (jortel@redhat.com)
+
 * Tue Mar 13 2012 Jeff Ortel <jortel@redhat.com> 0.3-1
 - deal with optional (body). (jortel@redhat.com)
 - Remove debug logging of pid. (jortel@redhat.com)
