@@ -62,6 +62,8 @@ class Call(Controller):
             any = body.any
             agent = AgentFacade(uuid, options)
             reply = agent.call(cls, method, request, replyto, any)
+            if replyto:
+                httpcode = 202 # accepted
         except EXCEPTIONS, raised:
             httpcode = status(raised)
             reply = Return.exception()
