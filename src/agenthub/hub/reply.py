@@ -25,6 +25,23 @@ from logging import getLogger
 log = getLogger(__name__)
 
 
+#
+# Utils
+#
+
+def exdict(raised, reply):
+    return dict(
+        xmsg=str(raised),
+        xmodule=reply.xmodule,
+        xclass=reply.xclass,
+        xstate=reply.xstate,
+        xargs=reply.xargs)
+
+
+#
+# Model Classes
+#
+
 class ReplyManager(Listener):
 
     CTAG = 'AGENTHUB__REPLY'
@@ -44,24 +61,21 @@ class ReplyManager(Listener):
             sn=reply.sn,
             any=any.any,
             status=(200, HTTP_CODES[200]),
-            reply=reply.retval)
+            reply=reply.retval,
+            exception=None)
         nj = NotifyJournal()
         nj.write(reply.sn, any.replyto, body)
             
     def failed(self, reply):
         log.info('failed: %s', reply)
         any = Options(reply.any)
-        try:
-            reply.throw()
-        except EXCEPTIONS, raised:
-            pass
-        httpcode = status(raised)
         body = dict(
             sn=reply.sn,
             any=any.any,
-            status=(httpcode, HTTP_CODES[httpcode]),
-            exception=str(raised))
-        nj = NotifyManager()
+            status=status(reply.exval),
+            exception=exdict(reply.exval, reply),
+            reply=None)
+        nj = NotifyJournal()
         nj.write(reply.sn, any.replyto, body)
             
     def status(self, reply):

@@ -41,7 +41,7 @@ class Test(Controller):
         s.append('      any: %s' % body.get('any'))
         s.append('   status: %s' % body.get('status'))
         s.append('    reply: %s' % body.get('reply'))
-        s.append('exception: %s' % body.get('exception'))
+        s.append('exception:\n%s' % body.get('exception'))
         f.write('\n'.join(s))
         f.write('\n')
         f.flush()

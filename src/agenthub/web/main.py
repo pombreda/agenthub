@@ -19,7 +19,9 @@ from agenthub.web.http import *
 from agenthub.web.controller import Controller
 from agenthub.hub.main import Agent as AgentFacade
 from agenthub.hub.model import *
+from agenthub.hub.reply import exdict
 from gofer.messaging import Options
+from gofer.rmi.dispatcher import Return
 from logging import getLogger
 
 
@@ -61,11 +63,13 @@ class Call(Controller):
             agent = AgentFacade(uuid, options)
             reply = agent.call(cls, method, request, replyto, any)
         except EXCEPTIONS, raised:
-            reply = str(raised)
             httpcode = status(raised)
+            reply = Return.exception()
+            reply = exdict(raised, reply)
         except Exception, raised:
             httpcode = 500
-            reply = str(raised)
+            reply = Return.exception()
+            reply = exdict(raised, reply)
         return self.reply(httpcode, reply)
 
     def body(self):
