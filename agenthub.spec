@@ -66,6 +66,9 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 20 2012 Jeff Ortel <jortel@redhat.com> 0.5-2
+- Requires gofer 0.67. (jortel@redhat.com)
+
 * Tue Mar 20 2012 Jeff Ortel <jortel@redhat.com> 0.5-1
 - Send ping/ on bootstrap and start services in application.
   (jortel@redhat.com)
