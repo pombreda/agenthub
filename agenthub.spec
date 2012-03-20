@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name: agenthub
-Version: 0.4
+Version: 0.5
 Release: 1%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
@@ -66,6 +66,10 @@ rm -rf %{buildroot}
 %doc LICENSE
 
 %changelog
+* Tue Mar 20 2012 Jeff Ortel <jortel@redhat.com> 0.5-1
+- Send ping/ on bootstrap and start services in application.
+  (jortel@redhat.com)
+
 * Fri Mar 16 2012 Jeff Ortel <jortel@redhat.com> 0.4-1
 - Change successful asynchronous httpcode (202) Accepted instead of 200.
   (jortel@redhat.com)
