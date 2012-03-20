@@ -2,7 +2,7 @@
 
 Name: agenthub
 Version: 0.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The Gofer server
 Group:   Development/Languages
 License: LGPLv2
@@ -14,7 +14,7 @@ BuildRequires: python2-devel
 BuildRequires: python-setuptools
 BuildRequires: rpm-python
 Requires: python-webpy
-Requires: python-gofer >= 0.66
+Requires: python-gofer >= 0.67
 Requires: python-iniparse
 Requires: python-simplejson
 Requires: mod_wsgi
