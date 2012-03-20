@@ -18,6 +18,10 @@ import httplib
 import simplejson as json
 
 
+HOST = 'localhost'
+PORT = 443
+
+
 class NoAuth:
     
     def header(self):
@@ -38,7 +42,7 @@ class Basic:
 
 class Rest:
     
-    def __init__(self, host, port, auth=NoAuth()):
+    def __init__(self, host=HOST, port=PORT, auth=NoAuth()):
         self.http = httplib.HTTPSConnection(host, port)
         self.auth = auth
 

@@ -25,7 +25,7 @@ LOGFILE = 'hub.log'
 
 TIME = '%(asctime)s'
 LEVEL = ' [%(levelname)s]'
-THREAD = '[%(threadName)s]'
+THREAD = '[%(process)d|%(threadName)s]'
 FUNCTION = ' %(funcName)s()'
 FILE = ' @ %(filename)s'
 LINE = ':%(lineno)d'

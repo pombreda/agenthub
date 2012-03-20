@@ -17,7 +17,7 @@ import web
 from agenthub.web import *
 from agenthub.web.http import *
 from agenthub.web.controller import Controller
-from agenthub.hub.main import Agent as AgentFacade
+from agenthub.hub.main import Agent as AgentImpl
 from agenthub.hub.model import *
 from agenthub.hub.reply import exdict
 from gofer.messaging import Options
@@ -35,14 +35,22 @@ log = getLogger(__name__)
 class Agent(Controller):
     
     def GET(self, uuid):
-        status = AgentFacade.status([uuid])
+        try:
+            status = AgentImpl.status([uuid])
+        except Exception, raised:
+            log.exception(uuid)
+            return (500, str(raised))
         return self.reply(200, status)
         
         
 class Agents(Controller):
     
     def GET(self):
-        status = AgentFacade.status()
+        try:
+            status = AgentImpl.status()
+        except Exception, raised:
+            log.exception('all')
+            return (500, [str(raised)])
         return self.reply(200, status)
 
 
@@ -60,7 +68,7 @@ class Call(Controller):
             replyto = ReplyTo(body.replyto)
             replyto = replyto.valid()
             any = body.any
-            agent = AgentFacade(uuid, options)
+            agent = AgentImpl(uuid, options)
             reply = agent.call(cls, method, request, replyto, any)
             if replyto:
                 httpcode = 202 # accepted

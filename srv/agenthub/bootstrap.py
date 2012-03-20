@@ -14,7 +14,7 @@
 #
 
 
-from agenthub.hub.services import Services
+from agenthub.rest import Rest
 
-
-Services.start()
+rest = Rest()
+rest.get('/agenthub/ping/')

@@ -14,26 +14,41 @@
 #
 
 import web
-import logging
-from agenthub.web import main
-from agenthub.web import publish
-from agenthub.web import test
-from agenthub.web import ping
-from agenthub.hub.services import Services
+import time
+from agenthub.web.controller import Controller
+from logging import getLogger
+
+log = getLogger(__name__)
+
+#
+# REST Controllers
+#
+
+
+class Ping(Controller):
+    
+    def GET(self):
+        log.info('ping')
+        return self.reply(200, time.ctime())
+
+    def POST(self):
+        log.info('ping')
+        return self.reply(200, self.body())
+    
+    def PUT(self):
+        log.info('ping')
+        return self.reply(200, self.body())
+    
+    def DELETE(self):
+        log.info('ping')
+        self.status(200)
 
 #
 # REST Application
 #
 
 URLS = (
-    '/agent', main.application,
-    '/publish', publish.application,
-    '/ping', ping.application,
-    '/test', test.application,
+    '/$', 'Ping',
 )
 
-def wsgi_application():
-    Services.start()
-    application = web.subdir_application(URLS)
-    appfn = application.wsgifunc()
-    return appfn
+application = web.application(URLS, globals())
