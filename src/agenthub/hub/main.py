@@ -39,10 +39,10 @@ class Agent:
             options.watchdog = Services.watchdog
             options.any = dict(any=any, replyto=replyto)
         agent = proxy.agent(self.uuid, **options)
-        Class = getattr(agent, classname)
+        Class = agent[classname]
         inst = Class()
         cntr = request.cntr
         if cntr:
             inst(*cntr[0], **cntr[1])
-        fn = getattr(inst, method)
+        fn = inst[method]
         return fn(*request.args, **request.kwargs)        
